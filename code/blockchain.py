@@ -1,16 +1,18 @@
 import random
 from peer import Peer
 from dex import DEX
+from mempool import Mempool
 
 
 class Blockchain:
-    def __init__(self, peers: list[Peer], topology: dict = None):
+    def __init__(self, peers: list[Peer], min_inc: float = 0.125):
         self.peers = peers
         self.dex = []
+        self.mempool = Mempool(min_inc)
 
     def get_peer(self, id:int) -> Peer:
         for peer in self.peers:
-            if peer.id == id:
+            if peer.peer_id == id:
                 return peer
         return None
     
@@ -30,7 +32,7 @@ class Blockchain:
     
     def create_topology(self):
         n = len(self.peers)
-        topology = {peer.id: set() for peer in self.peers}
+        topology = {peer.peer_id: set() for peer in self.peers}
         flag=True
         while(flag):
             available_ids = list(range(n))

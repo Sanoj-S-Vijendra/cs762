@@ -1,11 +1,13 @@
 import random
 
 class Transaction:
-    def __init__(self, peer_id: int, type: str, info: list, time: float, gas_price: float):
-        self.txn_id = random.randint(1,10**9)
+    def __init__(self, peer_id: int, nonce: int, info: list, time: float, gas_price: float, type: str = "swap"):
+        # self.txn_id = random.randint(1,10**9)
+        self.nonce=nonce
         self.peer_id = peer_id
         if type not in ["swap", "transfer"]:
-            raise ValueError("Invalid txn type.")
+            # raise ValueError("Invalid txn type.")
+            type="swap"
         self.type = type
         if type == "swap":
             self.dex_id = info[0]   #dex to use
@@ -20,7 +22,12 @@ class Transaction:
             self.amt = info[2]      #amt
         self.timestamp = time
         self.gas_price = gas_price
-        self.code = random.randint(1,20)
+        # self.code = random.randint(1,20)
+        if type == "transfer":
+            code = random.randint(1, 3)
+        elif type == "swap":
+            code = random.randint(8, 20)
+        self.code = code
     
     def __repr__(self):
         if self.type == "swap":
